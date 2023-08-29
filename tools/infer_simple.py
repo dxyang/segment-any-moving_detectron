@@ -196,14 +196,16 @@ def main():
         logging.root.setLevel(logging.WARN)
 
     file_logger = logging.getLogger(logging_path)
-    subprocess.call([
-        './git-state/save_git_state.sh',
-        str(output_dir / ('git-state_%s' % launch_time_str))
-    ])
+    # subprocess.call([
+    #    './git-state/save_git_state.sh',
+    #    str(output_dir / ('git-state_%s' % launch_time_str))
+    #])
 
     log_argv(file_logger)
     logging.info('Called with args:')
     logging.info(pformat(vars(args)))
+    print('Called with args:')
+    print(pformat(vars(args)))
 
     assert args.image_dirs or args.images
     assert bool(args.image_dirs) ^ bool(args.images)
@@ -250,7 +252,7 @@ def main():
     if args.cfg_file.endswith('.pkl'):
         import yaml
         with open(args.cfg_file, 'rb') as f:
-            other_cfg = yaml.load(pickle.load(f)['cfg'])
+            other_cfg = yaml.load(pickle.load(f)['cfg'], Loader=yaml.Loader)
         detectron_dir = Path(__file__).parent.parent
         if Path(other_cfg['ROOT_DIR']) != detectron_dir:
             other_cfg['ROOT_DIR'] = str(detectron_dir)
